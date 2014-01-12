@@ -40,6 +40,11 @@ namespace LeatherLoader
 				}
 			}
 
+			if (!Path.IsPathRooted (config.ModDirectoryPath))
+				config.ModDirectoryPath = Path.Combine (Path.GetDirectoryName (Assembly.GetExecutingAssembly ().Location), config.ModDirectoryPath);
+			if (!Path.IsPathRooted (config.ConfigDirectoryPath))
+				config.ConfigDirectoryPath = Path.Combine (Path.GetDirectoryName (Assembly.GetExecutingAssembly ().Location), config.ConfigDirectoryPath);
+
             ConsoleSystem.Log("Loading mods...");
 
             string modsFolder = Path.GetFullPath(Path.Combine(Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location), config.ModDirectoryPath));
