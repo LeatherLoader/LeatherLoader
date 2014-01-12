@@ -6,6 +6,7 @@ using System.Reflection;
 using System.Text;
 using LeatherLoader.ModList;
 using UnityEngine;
+using LitJson;
 
 namespace LeatherLoader
 {
@@ -25,9 +26,23 @@ namespace LeatherLoader
             //Load the loader info into the list of mods
             mLoadedMods.Add(new LeatherLoaderInfo());
 
+			ConsoleSystem.Log ("Loading leather config...");
+			LeatherConfig config = new LeatherConfig ();
+			string leatherConfigPath = Path.Combine (Path.GetDirectoryName (Assembly.GetExecutingAssembly ().Location), "leather.cfg");
+
+			if (!File.Exists (leatherConfigPath)) {
+				ConsoleSystem.Log ("Couldn't find leather.cfg! Loading default values...");
+			} else {
+				if (!config.Read(leatherConfigPath)) {
+					ConsoleSystem.Log("Couldn't parse leather.cfg properly! Loading default values...");
+				} else {
+					ConsoleSystem.Log("Loaded leather.cfg successfully.");
+				}
+			}
+
             ConsoleSystem.Log("Loading mods...");
 
-            string modsFolder = Path.GetFullPath(Path.Combine(Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location), "mods"));
+            string modsFolder = Path.GetFullPath(Path.Combine(Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location), config.ModDirectoryPath));
 
             if (Directory.Exists(modsFolder))
             {
@@ -35,7 +50,7 @@ namespace LeatherLoader
                 //Leather mods have no extension, are in Rust_Server_data or Rust_data and all end in _mod - we do this 
                 //because many server hosts aren't too okay with people uploading random DLLs, so we conceal the DLL-ness 
                 //by removing the extension
-                foreach (string file in Directory.GetFiles(modsFolder, "*_mod"))
+                foreach (string file in Directory.GetFiles(modsFolder, config.ModFilePattern))
                 {
                     ConsoleSystem.Log(string.Format("Attempting to scan Assembly: {0}", file));
                     
@@ -71,7 +86,9 @@ namespace LeatherLoader
                         {
                             //We do one gameobject per script, to allow the bootstrap scripts to do keep-alives on their gameobjects with some level of
                             //granularity.
-                            new GameObject(type.FullName).AddComponent(type);
+							GameObject obj = new GameObject(type.FullName);
+							obj.AddComponent(type);
+							obj.SendMessage ("ReceiveLeatherConfiguration", config, SendMessageOptions.DontRequireReceiver);
                         }
                     }
                 }

@@ -37,6 +37,7 @@
     <Compile Include="ModBootstrapper.cs" />
     <Compile Include="ModList\IModInfo.cs" />
     <Compile Include="ModList\LeatherLoaderInfo.cs" />
+    <Compile Include="Config\LeatherConfig.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <ItemGroup>
@@ -61,5 +62,11 @@
     <Reference Include="System">
       <HintPath>C:\Users\Stephen\Desktop\RustServer\System.dll</HintPath>
     </Reference>
+    <Reference Include="LitJSON">
+      <HintPath>C:\Users\Stephen\Desktop\RustServer\LitJSON.dll</HintPath>
+    </Reference>
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Config\" />
   </ItemGroup>
 </Project>
