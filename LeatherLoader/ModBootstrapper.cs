@@ -19,9 +19,22 @@ namespace LeatherLoader
 
         public void Start()
         {
-            //Set the server to modded if you have Leather installed, in order to be good citizens.
-            //This definintion was obtained by Black Magicks, so please don't be mad, it was for a good cause.
-            Rust.Steam.Server.SetModded();
+			try {
+	            //Set the server to modded if you have Leather installed, in order to be good citizens.
+	            //This definintion was obtained by Black Magicks, so please don't be mad, it was for a good cause.
+				Type server = Type.GetType ("Rust.Steam.Server, Assembly-CSharp-firstpass");
+
+				if (server != null) {
+					server.GetMethod("SetModded", Type.EmptyTypes).Invoke(null, new object[] {});
+
+					ConsoleSystem.Log ("Successfully invoked SetModded.");
+				} else {
+					ConsoleSystem.Log("Couldn't find server class to invoke SetModded- we're probably on a client.");
+				}
+			} catch (Exception e) {
+				ConsoleSystem.LogError("Exception raised while attempting to invoke SetModded on Server class.");
+				ConsoleSystem.LogException (e);
+			}
 
             //Load the loader info into the list of mods
             mLoadedMods.Add(new LeatherLoaderInfo());

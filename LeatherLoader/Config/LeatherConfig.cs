@@ -20,8 +20,8 @@ namespace LeatherLoader
 		public LeatherConfig ()
 		{
 			ModDirectoryPath = "mods";
-			ModFilePattern = "*_mods";
-			ConfigDirectoryPath = "mods" + Path.PathSeparator + "config";
+			ModFilePattern = "*_mod";
+			ConfigDirectoryPath = Path.Combine("mods", "config");
 		}
 
 		public string ModDirectoryPath { get; set; }
@@ -30,7 +30,7 @@ namespace LeatherLoader
 
 		public bool Read(string leatherConfigPath) {
 			string leatherConfigData = File.ReadAllText (leatherConfigPath);
-			var leatherOutData = JsonMapper.ToObject (leatherConfigPath);
+			var leatherOutData = JsonMapper.ToObject (leatherConfigData);
 
 			JsonData modsDir = leatherOutData ["modDirectoryPath"];
 			JsonData filePattern = leatherOutData ["modFilePattern"];
