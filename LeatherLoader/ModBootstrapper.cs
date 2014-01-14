@@ -61,6 +61,9 @@ namespace LeatherLoader
 
             ConsoleSystem.Log("Loading mods...");
 
+			string neolithLibPath = Path.GetFullPath (Path.Combine (Path.GetDirectoryName (Assembly.GetExecutingAssembly ().Location), "NeolithLib"));
+			ScanAssembly (neolithLibPath, config);
+
             string modsFolder = Path.GetFullPath(Path.Combine(Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location), config.ModDirectoryPath));
 
             if (Directory.Exists(modsFolder))
@@ -71,49 +74,48 @@ namespace LeatherLoader
                 //by removing the extension
                 foreach (string file in Directory.GetFiles(modsFolder, config.ModFilePattern))
                 {
-                    ConsoleSystem.Log(string.Format("Attempting to scan Assembly: {0}", file));
-                    
-                    //Load the assembly & cycle through types
-                    Assembly modFile = Assembly.LoadFile(file);
-
-                    List<Type> behaviours = new List<Type>();
-                    IModInfo modInfo = null;
-                    foreach (Type type in modFile.GetExportedTypes())
-                    {
-                        //I really need to move over to MonoDevelop! Anywhere you see object.ReferenceEquals used it's because the Visual Studio
-                        //version of a class has an equality operator that isn't in Mono
-                        if (!type.IsAbstract && !type.IsGenericType && !object.ReferenceEquals(type.GetConstructor(Type.EmptyTypes), null))
-                        {
-                            //All types we care about are non-generic, non abstract types with a parameterless constructor
-                            if (modInfo == null && typeof(IModInfo).IsAssignableFrom(type))
-                            {
-                                modInfo = (IModInfo)Activator.CreateInstance(type);
-                            } else if (typeof(MonoBehaviour).IsAssignableFrom(type) && type.GetCustomAttributes(typeof(BootstrapAttribute), false).Length != 0)
-                            {
-                                behaviours.Add(type);
-                            }
-                        }
-                    }
-
-                    if (modInfo != null)
-                    {
-                        //We found a modinfo so load the mod & any bootstrap behaviours
-                        ConsoleSystem.Log(string.Format("Located mod '{0}' with {1} MonoBehaviours to bootstrap.", modInfo.GetPrettyModName(), behaviours.Count));
-                        mLoadedMods.Add(modInfo);
-
-                        foreach (Type type in behaviours)
-                        {
-                            //We do one gameobject per script, to allow the bootstrap scripts to do keep-alives on their gameobjects with some level of
-                            //granularity.
-							GameObject obj = new GameObject(type.FullName);
-							obj.AddComponent(type);
-							obj.SendMessage ("ReceiveLeatherConfiguration", config, SendMessageOptions.DontRequireReceiver);
-                        }
-                    }
+					ScanAssembly(file, config);
                 }
             }
 
             ConsoleSystem.Log("Finished scanning for mods.");
         }
+
+		private void ScanAssembly(string file, NeolithConfig config)
+		{
+			ConsoleSystem.Log (string.Format ("Attempting to scan Assembly: {0}", file));
+			
+			//Load the assembly & cycle through types
+			Assembly modFile = Assembly.LoadFile (file);
+			
+			List<Type> behaviours = new List<Type> ();
+			IModInfo modInfo = null;
+			foreach (Type type in modFile.GetExportedTypes()) {
+				//I really need to move over to MonoDevelop! Anywhere you see object.ReferenceEquals used it's because the Visual Studio
+				//version of a class has an equality operator that isn't in Mono
+				if (!type.IsAbstract && !type.IsGenericType && !object.ReferenceEquals (type.GetConstructor (Type.EmptyTypes), null)) {
+					//All types we care about are non-generic, non abstract types with a parameterless constructor
+					if (modInfo == null && typeof(IModInfo).IsAssignableFrom (type)) {
+						modInfo = (IModInfo)Activator.CreateInstance (type);
+					} else if (typeof(MonoBehaviour).IsAssignableFrom (type) && type.GetCustomAttributes (typeof(BootstrapAttribute), false).Length != 0) {
+						behaviours.Add (type);
+					}
+				}
+			}
+			
+			if (modInfo != null) {
+				//We found a modinfo so load the mod & any bootstrap behaviours
+				ConsoleSystem.Log (string.Format ("Located mod '{0}' with {1} MonoBehaviours to bootstrap.", modInfo.GetPrettyModName (), behaviours.Count));
+				mLoadedMods.Add (modInfo);
+				
+				foreach (Type type in behaviours) {
+					//We do one gameobject per script, to allow the bootstrap scripts to do keep-alives on their gameobjects with some level of
+					//granularity.
+					GameObject obj = new GameObject (type.FullName);
+					obj.AddComponent (type);
+					obj.SendMessage ("ReceiveLeatherConfiguration", config, SendMessageOptions.DontRequireReceiver);
+				}
+			}
+		}
     }
 }
