@@ -4,9 +4,10 @@ using System.IO;
 using System.Linq;
 using System.Reflection;
 using System.Text;
-using LeatherLoader.ModList;
 using UnityEngine;
 using LitJson;
+using NeolithLib.Bootstrap;
+using NeolithLib.Config;
 
 namespace LeatherLoader
 {
@@ -40,7 +41,7 @@ namespace LeatherLoader
             mLoadedMods.Add(new LeatherLoaderInfo());
 
 			ConsoleSystem.Log ("Loading leather config...");
-			LeatherConfig config = new LeatherConfig ();
+			NeolithConfig config = new NeolithConfig ();
 			string leatherConfigPath = Path.Combine (Path.GetDirectoryName (Assembly.GetExecutingAssembly ().Location), "leather.cfg");
 
 			if (!File.Exists (leatherConfigPath)) {

@@ -3,6 +3,8 @@ Microsoft Visual Studio Solution File, Format Version 11.00
 # Visual Studio 2010
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LeatherLoader", "LeatherLoader\LeatherLoader.csproj", "{43BAA1D1-A162-44CB-8A2C-515BF5E630BF}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NeolithLib", "..\NeolithLib\NeolithLib.csproj", "{D5EE08E7-D63D-4D60-8903-05A7C23ABC64}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -13,6 +15,10 @@ Global
 		{43BAA1D1-A162-44CB-8A2C-515BF5E630BF}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{43BAA1D1-A162-44CB-8A2C-515BF5E630BF}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{43BAA1D1-A162-44CB-8A2C-515BF5E630BF}.Release|Any CPU.Build.0 = Release|Any CPU
+		{D5EE08E7-D63D-4D60-8903-05A7C23ABC64}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{D5EE08E7-D63D-4D60-8903-05A7C23ABC64}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{D5EE08E7-D63D-4D60-8903-05A7C23ABC64}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{D5EE08E7-D63D-4D60-8903-05A7C23ABC64}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(MonoDevelopProperties) = preSolution
 		StartupItem = LeatherLoader\LeatherLoader.csproj

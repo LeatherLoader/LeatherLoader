@@ -33,11 +33,8 @@
   </PropertyGroup>
   <ItemGroup>
     <Compile Include="AssemblyInfo.cs" />
-    <Compile Include="BootstrapAttribute.cs" />
     <Compile Include="ModBootstrapper.cs" />
-    <Compile Include="ModList\IModInfo.cs" />
     <Compile Include="ModList\LeatherLoaderInfo.cs" />
-    <Compile Include="Config\LeatherConfig.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <ItemGroup>
@@ -67,6 +64,12 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Folder Include="Config\" />
+    <ProjectReference Include="..\..\NeolithLib\NeolithLib.csproj">
+      <Project>{D5EE08E7-D63D-4D60-8903-05A7C23ABC64}</Project>
+      <Name>NeolithLib</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="ModList\" />
   </ItemGroup>
 </Project>
