@@ -8,7 +8,7 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 using System;
-using NeolithLib.Bootstrap;
+using NeolithLib.Bootstrapper;
 
 
 namespace LeatherLoader

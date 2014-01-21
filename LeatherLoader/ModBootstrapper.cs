@@ -6,7 +6,7 @@ using System.Reflection;
 using System.Text;
 using UnityEngine;
 using LitJson;
-using NeolithLib.Bootstrap;
+using NeolithLib.Bootstrapper;
 using NeolithLib.Config;
 
 namespace LeatherLoader
